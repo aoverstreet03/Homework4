@@ -3,7 +3,27 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% if players %}
+<table>
+       <thead>
+           <tr>
+               <th>ID</th>
+               <th>First Name</th>
+               <th>Last Name</th>
+               <th>Player Position</th>
+           </tr>
+       </thead>
 
-Hello World!
-
+       <tbody>
+           {% for row in players %}
+           <tr>
+               <td> {{ row.playerId}}</td>
+               <td> {{ row.first_name }}</td>
+               <td> {{ row.last_name }}</td>
+               <td> {{ row.player_position }}</td>
+           </tr>
+           {% endfor %}
+       </tbody>
+   </table>
+{% endif %}
 {% endblock %}
