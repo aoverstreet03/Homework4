@@ -47,13 +47,13 @@ def add_player():
 
 @app.route('/delete_player/<int:playerId>', methods=['GET','POST'])
 def delete_player(playerId):
-    if request.method == 'POST': 
-        obj = overstreet_dolphinsapp.query.filter_by(playerId=playerId).first()
-        db.session.delete(obj)
+    if request.method == 'POST': #if it's a POST request, delete the friend from the database
+        player = overstreet_dolphinsapp.query.get_or_404(playerId)
+        db.session.delete(player)
         db.session.commit()
         flash('Player was successfully deleted!')
         return redirect("/")
-    else:
+    else: #if it's a GET request, send them to the home page
         return redirect("/")
 
 if __name__ == '__main__':
