@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, redirect, request, flash
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
@@ -41,10 +41,20 @@ def add_player():
             player = overstreet_dolphinsapp(first_name=form.first_name.data, last_name=form.last_name.data, player_position=form.player_position.data)
             db.session.add(player)
             db.session.commit()
-            return "<h2> The Dolphins player's name is {0} {1} and their position is {2}.".format(form.first_name.data, form.last_name.data, form.player_position.data)
+            return redirect('/')
 
     return render_template('add_player.html', form=form, pageTitle='Add A New Dolphins Player')
 
+@app.route('/delete_player/<int:playerId>', methods=['GET','POST'])
+def delete_player(playerId):
+    if request.method == 'POST': 
+        obj = overstreet_dolphinsapp.query.filter_by(playerId=playerId).first()
+        db.session.delete(obj)
+        db.session.commit()
+        flash('Player was successfully deleted!')
+        return redirect("/")
+    else:
+        return redirect("/")
 
 if __name__ == '__main__':
     app.run(debug=True)

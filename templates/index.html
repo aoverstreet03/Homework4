@@ -3,6 +3,8 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<p><a href="{{ url_for('.add_player')}}"> Add a new player</a></p>
+
 {% if players %}
 <table>
        <thead>
@@ -22,6 +24,12 @@
                <td> {{ row.last_name }}</td>
                <td> {{ row.player_position }}</td>
            </tr>
+           <td>
+             <form action="/delete_player{{ row.playerId }}" method="POST">
+               <input type="submit" value="Delete" class="btn btn-danger" />
+             </form>
+           </td>
+
            {% endfor %}
        </tbody>
    </table>
