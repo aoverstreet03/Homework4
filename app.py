@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, redirect, request, flash
+from flask import render_template, redirect, request, flash, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
@@ -17,8 +17,9 @@ dbname = os.environ.get('DBNAME')
 conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(dbuser, dbpass, dbhost, dbname)
 
 app = Flask(__name__)
-app.config['SECRET_KEY']= 'aJasldihfaEJKF105urwrfhsJAJF'
+app.config['SECRET_KEY']= 'aliq!#LiNE@*;oaf098023L(U)*8cer'
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
+
 db = SQLAlchemy(app)
 
 class overstreet_dolphinsapp(db.Model):
