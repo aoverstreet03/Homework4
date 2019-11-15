@@ -36,6 +36,21 @@ def index():
     all_players = overstreet_dolphinsapp.query.all()
     return render_template('index.html',  players=all_players, pageTitle='Miami Dolphins Players')
 
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        print('post method')
+        form = request.form
+        search_value = form['search_string']
+        print(search_value)
+        search = "%{}%".format(search_value)
+        print(search)
+        results = overstreet_dolphinsapp.query.filter(overstreet_dolphinsapp.first_name.like(search)).all()
+        return render_template('index.html', players=results, pageTitle='Dolphins Players', legend='Search Results')
+    else:
+        return redirect('/')
+
+
 @app.route('/add_player', methods=['GET', 'POST'])
 def add_player():
     form = DolphinsForm()
