@@ -1,11 +1,12 @@
 from flask import Flask
-from flask import render_template, redirect, request, flash
+from flask import render_template, redirect, request, flash, url_for
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, SubmitField, IntegerField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 import secrets
+
 
 conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(secrets.dbuser, secrets.dbpass, secrets.dbhost, secrets.dbname)
 
@@ -25,6 +26,7 @@ def __repr__(self):
         return "playerId: {0} | first name: {1} | last name: {2} | player position: {3}".format(self.id, self.first_name, self.last_name, self.player_position)
 
 class DolphinsForm(FlaskForm):
+    playerId = IntegerField('Player ID:')
     first_name = StringField('First Name:', validators=[DataRequired()])
     last_name = StringField('Last Name:', validators=[DataRequired()])
     player_position = StringField('Player Position:', validators=[DataRequired()])
@@ -54,7 +56,32 @@ def delete_player(playerId):
         flash('Player was successfully deleted!')
         return redirect("/")
     else: #if it's a GET request, send them to the home page
-        return redirect("/")
+        return redirect
+
+@app.route('/player/<int:player_id>/update', methods=['GET','POST'])
+def update_player(player_id):
+    player = overstreet_dolphinsapp.query.get_or_404(player_id)
+    form = DolphinsForm()
+    if form.validate_on_submit():
+        player.player_position = form.player_position.data
+        player.first_name = form.first_name.data
+        player.last_name = form.last_name.data
+        db.session.commit()
+        flash('Your player has been updated.')
+        return redirect(url_for('get_player', player_id=player.playerId))
+    #elif request.method == 'GET':
+    form.playerId.data = player.playerId
+    form.player_position.data = player.player_position
+    form.first_name.data = player.first_name
+    form.last_name.data = player.last_name
+    return render_template('update_player.html', form=form, pageTitle='Update Post',
+                            legend="Update A Player")
+
+
+@app.route('/player/<int:player_id>', methods=['GET','POST'])
+def get_player(player_id):
+    player = overstreet_dolphinsapp.query.get_or_404(player_id)
+    return render_template('player.html', form=player, pageTitle= 'Player Details', legend='Details Page')
 
 if __name__ == '__main__':
     app.run(debug=True)
