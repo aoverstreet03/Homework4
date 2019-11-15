@@ -3,7 +3,13 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<p><a href="{{ url_for('.add_player')}}"> Add a new player</a></p>
+
+<form method = "POST">
+    <input type = "text" autofocus="autofocus" name="search_string">
+    <input type = "submit" formaction="/search" value="search">
+</form>
+
+<p><a href="{{ url_for('add_player')}}"> Add a new player</a></p>
 
 {% if players %}
 <table>
@@ -25,11 +31,10 @@
                <td> {{ row.player_position }}</td>
            </tr>
            <td>
-             <form action="/delete_player/{{ row.playerId }}" method="POST">
-               <input type="submit" value="Delete" class="btn btn-danger" />
+             <form action="{{ url_for('get_player', player_id=row.playerId) }}" method = "POST">
+               <input type="submit" value="Details" class="btn btn-danger" />
              </form>
            </td>
-
            {% endfor %}
        </tbody>
    </table>

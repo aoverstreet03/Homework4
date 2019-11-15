@@ -2,16 +2,17 @@
 {% block body %}
 <div>
 
-  <h3>Add A New Dolphins Player</h3>
+  <h3>{{ legend }}</h3>
 
   <form method="POST" action="">
 
     {{ form.csrf_token }}
+    {{ form.playerId.label }} {{ form.playerId(size=5, readonly=true) }}
     {{ form.first_name.label }} {{ form.first_name(size=20) }}
     {{ form.last_name.label }} {{ form.last_name(size=20) }}
     {{ form.player_position.label }} {{ form.player_position(size=20) }}
 
-    <input type="submit" value="Add A New Dolphins Player">
+    <input type="submit" value="Save">
 
   </form>
 
